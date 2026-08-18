@@ -112,10 +112,15 @@ but does not classify it as tax in GoHighLevel's reporting.
 Rate limits and 5xx responses are retried with backoff; a rejected payload is
 not retried and GoHighLevel's own error message is passed straight through.
 
-> The GoHighLevel request shapes follow the documented v2 API, but the docs were
-> not reachable from the build environment and no live account was available, so
-> this path has not been exercised against the real API. Run one invoice with
-> `GHL_LIVE_MODE=false` first and check the payload before going live.
+The payload mapping is covered by tests in `test/ghl.test.js` — most importantly
+that the line items GoHighLevel receives add up to the invoice total, under both
+tax arrangements and with a flat VAT line.
+
+> What those tests cannot cover is the API itself. The request shapes follow the
+> documented v2 API, but the docs were not reachable from the build environment
+> and no live account was available, so nothing here has been exercised against
+> the real GoHighLevel. Run one invoice with `GHL_LIVE_MODE=false` first and
+> check it lands correctly before going live.
 
 ## API
 
@@ -157,7 +162,7 @@ server/config.js     Environment configuration and a small .env loader
 server/ghl.js        GoHighLevel client: contacts, invoices, send
 server/index.js      HTTP server and JSON API
 public/              Calculator UI
-test/                Verification against both spreadsheets
+test/                Verification against both spreadsheets, and the GoHighLevel mapping
 ```
 
 ## Changing prices
