@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>360 Studio Wild — Tile Calculator</title>
+<link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+
+<header class="masthead">
+  <h1>360 Studio Wild</h1>
+  <span class="tagline">Digital Ceramics Custom Tiles — project calculator &amp; invoicing</span>
+  <span class="spacer"></span>
+  <span class="badge" id="ghlBadge">GoHighLevel: checking…</span>
+</header>
+
+<main>
+  <!-- ============================ INPUTS ============================ -->
+  <div>
+    <section class="panel">
+      <h2>Pricing basis</h2>
+      <div class="body">
+        <div class="field">
+          <label>How is this project priced?</label>
+          <div class="seg" id="modeToggle">
+            <button type="button" data-mode="per_sqft" aria-pressed="true">Per square foot</button>
+            <button type="button" data-mode="per_tile" aria-pressed="false">Per tile</button>
+          </div>
+          <div class="hint" id="modeHint"></div>
+        </div>
+
+        <div id="sqftInputs">
+          <div class="row">
+            <div class="field">
+              <label>Base price £ / m²</label>
+              <input type="number" id="bpPerSquareMetre" step="0.01" value="61">
+            </div>
+            <div class="field">
+              <label>Base price £ / sq ft</label>
+              <input type="number" id="bpPerSquareFoot" step="0.01" value="5.67">
+            </div>
+          </div>
+          <label class="check">
+            <input type="checkbox" id="deriveFromSquareMetre">
+            Derive £/sq ft from £/m² (÷ 10.7639)
+          </label>
+        </div>
+
+        <div class="row three">
+          <div class="field">
+            <label>FX rate £→$</label>
+            <input type="number" id="fxRate" step="0.01" value="1.35">
+          </div>
+          <div class="field">
+            <label>Tariff %</label>
+            <input type="number" id="tariffRate" step="0.1" value="10">
+          </div>
+          <div class="field">
+            <label>Commission %</label>
+            <input type="number" id="commissionRate" step="0.1" value="40">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Project area</h2>
+      <div class="body">
+        <div class="row">
+          <div class="field">
+            <label>Square feet</label>
+            <input type="number" id="squareFeet" step="0.01" value="250">
+          </div>
+          <div class="field">
+            <label>Square inches (overrides)</label>
+            <input type="number" id="squareInches" step="1" placeholder="auto = sq ft × 144">
+          </div>
+        </div>
+        <div class="hint" id="areaHint"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Tile prices &amp; quantities</h2>
+      <div class="body">
+        <div class="field">
+          <label>Format to invoice</label>
+          <select id="selectedFormat"></select>
+        </div>
+        <div id="tilePrices"></div>
+        <div class="field" style="margin-top:14px">
+          <label>Specialty pieces (quantity)</label>
+          <div id="specialty"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Tax &amp; add-ons</h2>
+      <div class="body">
+        <div class="row">
+          <div class="field">
+            <label>Tax jurisdiction</label>
+            <input type="text" id="taxLabel" value="California 94110">
+          </div>
+          <div class="field">
+            <label>Tax rate %</label>
+            <input type="number" id="taxRate" step="0.001" value="8.625">
+          </div>
+        </div>
+        <div class="row three">
+          <div class="field">
+            <label>Studio time $</label>
+            <input type="number" id="studioTime" step="1" value="85">
+          </div>
+          <div class="field">
+            <label>Shipping — samples $</label>
+            <input type="number" id="shippingSamples" step="1" value="50">
+          </div>
+          <div class="field">
+            <label>Shipping — tiles $</label>
+            <input type="number" id="shippingCompleted" step="1" value="0">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Flat VAT line $</label>
+            <input type="number" id="flatVat" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label>Deposit due on invoice %</label>
+            <input type="number" id="depositRate" step="1" value="50">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Donor pricing</h2>
+      <div class="body">
+        <div class="hint" style="margin-bottom:10px">
+          What a donor is asked to pay per piece. Profit is that price less the landed cost.
+        </div>
+        <div id="donorPricing"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Client &amp; invoice</h2>
+      <div class="body">
+        <div class="row">
+          <div class="field"><label>Invoice number</label><input type="text" id="invoiceNumber" value="1"></div>
+          <div class="field">
+            <label>Document type</label>
+            <select id="invoiceTitle"><option>PROFORMA</option><option>INVOICE</option></select>
+          </div>
+        </div>
+        <div class="field"><label>Client / organisation</label><input type="text" id="clientCompany" placeholder="Meals on Wheels"></div>
+        <div class="field"><label>Contact name</label><input type="text" id="clientName" placeholder="Chelsea Eifert"></div>
+        <div class="row">
+          <div class="field"><label>Email</label><input type="email" id="clientEmail" placeholder="name@example.org"></div>
+          <div class="field"><label>Phone</label><input type="text" id="clientPhone"></div>
+        </div>
+        <div class="field"><label>Address</label><input type="text" id="clientLine1" placeholder="Street address"></div>
+        <div class="row three">
+          <div class="field"><label>City</label><input type="text" id="clientCity"></div>
+          <div class="field"><label>State</label><input type="text" id="clientState"></div>
+          <div class="field"><label>ZIP</label><input type="text" id="clientPostal"></div>
+        </div>
+        <div class="field"><label>Project</label><input type="text" id="projectName" value="Custom Designed Mural Tiles"></div>
+        <div class="field"><label>Project detail</label><input type="text" id="projectDetail" placeholder="Donor Wall"></div>
+        <div class="row">
+          <div class="field"><label>Issue date</label><input type="date" id="issueDate"></div>
+          <div class="field"><label>Due in (days)</label><input type="number" id="dueInDays" value="14"></div>
+        </div>
+        <div class="field">
+          <label>Price the invoice at</label>
+          <select id="priceBasis">
+            <option value="cost">Landed cost (studio bills the client)</option>
+            <option value="donor_low">Low donor price</option>
+            <option value="donor_high">High donor price</option>
+          </select>
+        </div>
+        <label class="check">
+          <input type="checkbox" id="billWholeTiles" checked>
+          Invoice whole tiles (round the count up)
+        </label>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================ OUTPUTS ============================ -->
+  <div>
+    <section class="panel">
+      <h2>Basis</h2>
+      <div class="cards" id="basisCards"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Cost by tile format</h2>
+      <div class="scroll"><table id="formatTable"></table></div>
+    </section>
+
+    <section class="panel">
+      <h2>Client pricing sheet</h2>
+      <div id="pricingWarning"></div>
+      <div class="scroll"><table id="pricingTable"></table></div>
+    </section>
+
+    <section class="panel">
+      <h2>Invoice</h2>
+      <pre class="invoice" id="invoicePreview"></pre>
+      <div class="actions">
+        <button class="action" id="pushGhl">Create invoice in GoHighLevel</button>
+        <button class="action ghost" id="sendGhl">Create &amp; email to client</button>
+        <button class="action ghost" id="downloadJson">Download costing (JSON)</button>
+      </div>
+      <div class="status info" id="ghlStatus">Not sent yet.</div>
+    </section>
+  </div>
+</main>
+
+<script type="module" src="/public/app.js"></script>
+</body>
+</html>

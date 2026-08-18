@@ -1,0 +1,12 @@
+{
+  "name": "studio-wild-tile-calculator",
+  "version": "1.0.0",
+  "description": "Tile project cost calculator, invoice generator and GoHighLevel invoice sync for 360 Studio Wild, LLC",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node --test test/*.test.js"
+  }
+}
